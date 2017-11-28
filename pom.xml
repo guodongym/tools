@@ -163,7 +163,7 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <phase>deploy</phase>
+                        <phase>compile</phase>
                         <goals>
                             <goal>jar</goal>
                         </goals>
@@ -180,18 +180,6 @@
                         <!--<phase>deploy</phase>-->
                         <!--<goals>-->
                             <!--<goal>jar</goal>-->
-                        <!--</goals>-->
-                    <!--</execution>-->
-                <!--</executions>-->
-            <!--</plugin>-->
-            <!--<plugin>-->
-                <!--<artifactId>maven-deploy-plugin</artifactId>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<id>deploy</id>-->
-                        <!--<phase>deploy</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>deploy</goal>-->
                         <!--</goals>-->
                     <!--</execution>-->
                 <!--</executions>-->
