@@ -1,11 +1,13 @@
 package com.bitnei.tools.aop;
 
 import com.alibaba.fastjson.JSON;
+import com.bitnei.tools.constant.EmptyObjectConstant;
 import com.bitnei.tools.entity.ArcResponse;
 import com.bitnei.tools.entity.DateFormatEnum;
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
@@ -27,14 +29,6 @@ public class LogAspect {
 
     private static Logger logger = LoggerFactory.getLogger(LogAspect.class);
 
-    private long startTimeMillis;
-    private long endTimeMillis;
-    private String resultMeta;
-    private String url;
-    private String method;
-    private String uri;
-    private String queryString;
-
     /**
      * 切点，controller包下所有带有RequestMapping注解的方法
      */
@@ -42,39 +36,29 @@ public class LogAspect {
     public void controllerMethodPointcut() {
     }
 
-
-    @Before("controllerMethodPointcut()")
-    public void doBefore(JoinPoint joinPoint) {
-        // 记录方法开始执行的时间
-        startTimeMillis = System.currentTimeMillis();
-    }
-
-    @After("controllerMethodPointcut()")
-    public void doAfter(JoinPoint joinPoint) {
-        // 记录方法执行完成的时间
-        endTimeMillis = System.currentTimeMillis();
-        this.printLog();
-    }
-
     /**
      * 记录访问日志
      */
     @Around("controllerMethodPointcut()")
     public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
+        // 记录方法开始执行的时间
+        long startTimeMillis = System.currentTimeMillis();
+
         RequestAttributes ra = RequestContextHolder.getRequestAttributes();
         ServletRequestAttributes sra = (ServletRequestAttributes) ra;
         HttpServletRequest request = sra.getRequest();
 
-        url = request.getRequestURL().toString();
-        method = request.getMethod();
-        uri = request.getRequestURI();
+        String url = request.getRequestURL().toString();
+        String method = request.getMethod();
 
+        String queryString = EmptyObjectConstant.EMPTY_STRING;
         if (pjp.getArgs() != null && pjp.getArgs().length > 0) {
             // 只拦截第一个参数信息
             queryString = JSON.toJSONStringWithDateFormat(pjp.getArgs()[0], DateFormatEnum.DATE_TIME.getFormat());
         }
 
         Object result;
+        String resultMeta = EmptyObjectConstant.EMPTY_STRING;
         try {
             result = pjp.proceed();
             ArcResponse response = (ArcResponse) result;
@@ -82,13 +66,13 @@ public class LogAspect {
         } catch (Throwable e) {
             resultMeta = e.toString();
             throw e;
+        } finally {
+            // 记录方法执行完成的时间
+            long endTimeMillis = System.currentTimeMillis();
+
+            logger.info("executionTime:{}MS, url:{}, method:{}, queryString:{}, resultMeta:{}",
+                    endTimeMillis - startTimeMillis, url, method, queryString, resultMeta);
         }
-
         return result;
-    }
-
-    private void printLog() {
-        logger.info("executionTime:{}ms , url:{} , method:{} , uri:{} , queryString:{} , resultMeta:{}",
-                endTimeMillis - startTimeMillis, url, method, uri, queryString, resultMeta);
     }
 }
