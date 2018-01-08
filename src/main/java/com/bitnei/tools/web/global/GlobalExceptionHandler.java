@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolationException;
 
 /**
  * GlobalExceptionHandler : 全局异常处理, 通用的异常在此进行处理, 例如: http method不匹配(405)
@@ -61,7 +62,7 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 处理validation框架参数校验异常
+     * 处理validation框架参数校验异常(bean验证)
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -69,6 +70,17 @@ public class GlobalExceptionHandler {
     public ArcExceptionResponse handleMethodArgumentNotValidException(HttpServletRequest req, MethodArgumentNotValidException ex) {
         logger.warn("参数校验异常==>{}{}", getString(req), ex.getMessage());
         return ArcExceptionResponse.create(HttpStatus.BAD_REQUEST.value(), ex.getBindingResult().getFieldError().getDefaultMessage());
+    }
+
+    /**
+     * 处理validation框架参数校验异常(方法验证)
+     */
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ArcExceptionResponse handleConstraintViolationException(HttpServletRequest req, ConstraintViolationException ex) {
+        logger.warn("参数校验异常==>{}{}", getString(req), ex.getMessage());
+        return ArcExceptionResponse.create(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
     }
 
     /**
