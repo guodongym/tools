@@ -176,15 +176,13 @@ public class DateUtil {
      * 获取指定日期的起始值, e.g: 2014-11-11 10:11:22 -> 2014-11-11 00:00:00
      *
      * @param dateString 字符串日期
-     * @param srcFormat  源日期格式化
-     * @param destFormat 目标日期格式化 DateFormatEnum.DATE_TIME
-     *                   DateFormatEnum.DATE_TIME_NO_SEPARATOR
-     * @return 格式化之后字符串
+     * @param format     格式化
+     * @return 格式化之后字符串，格式化类型DateFormatEnum.DATE_TIME
      */
-    public static String getDateStartByDate(String dateString, DateFormatEnum srcFormat, DateFormatEnum destFormat) throws ParseException {
-        Date date = convertString2Date(dateString, srcFormat);
+    public static String getDateStartByDate(String dateString, DateFormatEnum format) throws ParseException {
+        Date date = convertString2Date(dateString, format);
         Date startDate = getDateStartByDate(date);
-        return convertDate2String(startDate, destFormat);
+        return convertDate2String(startDate, DateFormatEnum.DATE_TIME);
     }
 
     /**
@@ -206,15 +204,13 @@ public class DateUtil {
      * 获取指定日期的结束值, e.g: 2014-11-11 10:11:22 -> 2014-11-11 23:59:59
      *
      * @param dateString 字符串日期
-     * @param srcFormat  源日期格式化
-     * @param destFormat 目标日期格式化 DateFormatEnum.DATE_TIME
-     *                   DateFormatEnum.DATE_TIME_NO_SEPARATOR
-     * @return 格式化之后字符串
+     * @param format     格式化
+     * @return 格式化之后字符串，格式化类型DateFormatEnum.DATE_TIME
      */
-    public static String getDateEndByDate(String dateString, DateFormatEnum srcFormat, DateFormatEnum destFormat) throws ParseException {
-        Date date = convertString2Date(dateString, srcFormat);
+    public static String getDateEndByDate(String dateString, DateFormatEnum format) throws ParseException {
+        Date date = convertString2Date(dateString, format);
         Date endDate = getDateEndByDate(date);
-        return convertDate2String(endDate, destFormat);
+        return convertDate2String(endDate, DateFormatEnum.DATE_TIME);
     }
 
     /**
