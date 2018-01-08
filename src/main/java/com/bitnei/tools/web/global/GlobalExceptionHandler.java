@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import java.util.Set;
 
 /**
  * GlobalExceptionHandler : 全局异常处理, 通用的异常在此进行处理, 例如: http method不匹配(405)
@@ -80,7 +82,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public ArcExceptionResponse handleConstraintViolationException(HttpServletRequest req, ConstraintViolationException ex) {
         logger.warn("参数校验异常==>{}{}", getString(req), ex.getMessage());
-        return ArcExceptionResponse.create(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
+        return ArcExceptionResponse.create(HttpStatus.BAD_REQUEST.value(), extractMessage(ex.getConstraintViolations()));
     }
 
     /**
@@ -108,5 +110,19 @@ public class GlobalExceptionHandler {
 
     private String getString(HttpServletRequest req) {
         return " URI:" + req.getRequestURI() + " , Method:" + req.getMethod() + " , Message:";
+    }
+
+    /**
+     * 提取ConstraintViolationException失败信息
+     *
+     * @param constraintViolations 信息列表
+     * @return 格式化后的信息
+     */
+    private String extractMessage(Set<? extends ConstraintViolation> constraintViolations) {
+        StringBuilder builder = new StringBuilder();
+        for (ConstraintViolation violation : constraintViolations) {
+            builder.append(violation.getMessage()).append(",").append(violation.getInvalidValue()).append(";");
+        }
+        return builder.toString();
     }
 }
