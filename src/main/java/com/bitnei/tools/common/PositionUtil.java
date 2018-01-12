@@ -26,6 +26,7 @@ import com.bitnei.tools.entity.Gps;
  */
 public class PositionUtil {
 
+    private static double xpi = 3.14159265358979324 * 3000.0 / 180.0;
     private static double pi = 3.1415926535897932384626;
     private static double a = 6378245.0;
     private static double ee = 0.00669342162296594323;
@@ -64,8 +65,8 @@ public class PositionUtil {
      * 火星坐标系 (GCJ-02) 与百度坐标系 (BD-09) 的转换算法 将 GCJ-02 坐标转换成 BD-09 坐标
      */
     public static Gps gcj02ToBd09(double lat, double lon) {
-        double z = Math.sqrt(lon * lon + lat * lat) + 0.00002 * Math.sin(lat * pi);
-        double theta = Math.atan2(lat, lon) + 0.000003 * Math.cos(lon * pi);
+        double z = Math.sqrt(lon * lon + lat * lat) + 0.00002 * Math.sin(lat * xpi);
+        double theta = Math.atan2(lat, lon) + 0.000003 * Math.cos(lon * xpi);
         double bdLon = z * Math.cos(theta) + 0.0065;
         double bdLat = z * Math.sin(theta) + 0.006;
         return new Gps(bdLat, bdLon);
@@ -77,8 +78,8 @@ public class PositionUtil {
      */
     public static Gps bd09ToGcj02(double bdLat, double bdLon) {
         double x = bdLon - 0.0065, y = bdLat - 0.006;
-        double z = Math.sqrt(x * x + y * y) - 0.00002 * Math.sin(y * pi);
-        double theta = Math.atan2(y, x) - 0.000003 * Math.cos(x * pi);
+        double z = Math.sqrt(x * x + y * y) - 0.00002 * Math.sin(y * xpi);
+        double theta = Math.atan2(y, x) - 0.000003 * Math.cos(x * xpi);
         double lon = z * Math.cos(theta);
         double lat = z * Math.sin(theta);
         return new Gps(lat, lon);
@@ -153,15 +154,15 @@ public class PositionUtil {
 
         // 北斗芯片获取的经纬度为WGS84地理坐标 31.164601,121.486063
         Gps gps = new Gps(31.164601, 121.486063);
-        System.out.println("gps :" + gps);
+        System.out.println("wgs84 :" + gps);
         Gps gcj = gps84ToGcj02(gps.getWgLat(), gps.getWgLon());
-        System.out.println("gcj :" + gcj);
+        System.out.println("gcj02:" + gcj);
         assert gcj != null;
         Gps star = gcj02ToGps84(gcj.getWgLat(), gcj.getWgLon());
-        System.out.println("star:" + star);
+        System.out.println("wgs84:" + star);
         Gps bd = gcj02ToBd09(gcj.getWgLat(), gcj.getWgLon());
-        System.out.println("bd  :" + bd);
+        System.out.println("bd09:" + bd);
         Gps gcj2 = bd09ToGcj02(bd.getWgLat(), bd.getWgLon());
-        System.out.println("gcj :" + gcj2);
+        System.out.println("gcj02:" + gcj2);
     }
 }
