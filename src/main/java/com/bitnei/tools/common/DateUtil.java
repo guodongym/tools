@@ -8,8 +8,10 @@ import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -28,6 +30,17 @@ public class DateUtil {
      */
     public static String getYesterday(DateFormatEnum format) {
         Date time = getDefineTime(Calendar.DATE, -1);
+        return convertDate2String(time, format);
+    }
+
+    /**
+     * 获取当前月
+     *
+     * @param format 格式化
+     * @return 当前月日期
+     */
+    public static String getCurrentMonth(DateFormatEnum format) {
+        Date time = getDefineTime(Calendar.MONTH, 0);
         return convertDate2String(time, format);
     }
 
@@ -222,6 +235,35 @@ public class DateUtil {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, -30);
         return new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
+    }
+
+
+    /**
+     * 获取两个日期之间的所有月份
+     *
+     * @param minDate 开始日期
+     * @param maxDate 结束日期
+     * @return 月份列表
+     * @throws ParseException 日期转换日常
+     */
+    public static List<String> getMonthBetween(String minDate, String maxDate) throws ParseException {
+        ArrayList<String> result = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat(DateFormatEnum.MONTH_NO_SEPARATOR.getFormat());
+
+        Calendar min = Calendar.getInstance();
+        Calendar max = Calendar.getInstance();
+
+        min.setTime(sdf.parse(minDate));
+        min.set(Calendar.DAY_OF_MONTH, 1);
+
+        max.setTime(sdf.parse(maxDate));
+        max.set(Calendar.DAY_OF_MONTH, 2);
+
+        while (min.before(max)) {
+            result.add(sdf.format(min.getTime()));
+            min.add(Calendar.MONTH, 1);
+        }
+        return result;
     }
 }
                                                   
