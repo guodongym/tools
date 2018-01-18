@@ -1,4 +1,4 @@
-package com.bitnei.tools.annotation;
+package com.bitnei.tools.annotation.validator;
 
 
 import com.bitnei.tools.validator.DateFormatValidator;
@@ -24,9 +24,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface DateFormat {
 
-    String[] formats() default {"yyyy-MM-dd"};
+    String format() default "yyyy-MM-dd";
 
-    String message() default "日期格式不正确,规则:[formats:{formats}]";
+    String message() default "日期格式不正确,规则:[format:{format}]";
 
     Class<?>[] groups() default {};
 

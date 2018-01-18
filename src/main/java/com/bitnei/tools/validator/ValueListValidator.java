@@ -1,7 +1,7 @@
 package com.bitnei.tools.validator;
 
 
-import com.bitnei.tools.annotation.ValueList;
+import com.bitnei.tools.annotation.validator.ValueList;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

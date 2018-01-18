@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -72,7 +74,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public ArcExceptionResponse handleMethodArgumentNotValidException(HttpServletRequest req, MethodArgumentNotValidException ex) {
         logger.warn("参数校验异常==>{}{}", getString(req), ex.getMessage());
-        return ArcExceptionResponse.create(HttpStatus.BAD_REQUEST.value(), ex.getBindingResult().getFieldError().getDefaultMessage());
+        return ArcExceptionResponse.create(HttpStatus.BAD_REQUEST.value(), getDefaultMessage(ex.getBindingResult()));
     }
 
     /**
@@ -83,7 +85,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public ArcExceptionResponse handleBindException(HttpServletRequest req, BindException ex) {
         logger.warn("参数校验异常==>{}{}", getString(req), ex.getMessage());
-        return ArcExceptionResponse.create(HttpStatus.BAD_REQUEST.value(), ex.getBindingResult().getFieldError().getDefaultMessage());
+        return ArcExceptionResponse.create(HttpStatus.BAD_REQUEST.value(), getDefaultMessage(ex.getBindingResult()));
     }
 
     /**
@@ -122,6 +124,21 @@ public class GlobalExceptionHandler {
 
     private String getString(HttpServletRequest req) {
         return " URI:" + req.getRequestURI() + " , Method:" + req.getMethod() + " , Message:";
+    }
+
+    /**
+     * 获取返回提示信息，如果没有属性错误则返回全局错误
+     *
+     * @param bindingResult 错误结果
+     * @return 错误提示
+     */
+    private String getDefaultMessage(BindingResult bindingResult) {
+        FieldError fieldError = bindingResult.getFieldError();
+        if (fieldError == null) {
+            return bindingResult.getGlobalError().getDefaultMessage();
+        } else {
+            return fieldError.getDefaultMessage();
+        }
     }
 
     /**

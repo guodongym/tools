@@ -1,4 +1,4 @@
-package com.bitnei.tools.annotation;
+package com.bitnei.tools.annotation.validator;
 
 
 import com.bitnei.tools.validator.ValueListValidator;

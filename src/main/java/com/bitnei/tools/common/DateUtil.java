@@ -89,6 +89,31 @@ public class DateUtil {
      * @param dateFormat
      * @return
      */
+    public static Date convertString2Date(String dateStr, String dateFormat) throws ParseException {
+        if (null == dateStr || "".equals(dateStr.trim())) {
+            return new Date();
+        }
+
+        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+        Date result;
+        try {
+            result = sdf.parse(dateStr);
+        } catch (ParseException e) {
+            logger.error(SymbolConstant.POUND_TWENTY + "字符串日期不合法" + SymbolConstant.COLON
+                    + dateStr
+                    + SymbolConstant.POUND_TWENTY);
+            throw new ParseException(e.getMessage(), e.getErrorOffset());
+        }
+        return result;
+    }
+
+    /**
+     * 字符串转日期类型
+     *
+     * @param dateStr
+     * @param dateFormat
+     * @return
+     */
     public static Date convertString2Date(String dateStr, DateFormatEnum dateFormat) throws ParseException {
         if (null == dateStr || "".equals(dateStr.trim())) {
             return new Date();

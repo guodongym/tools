@@ -1,7 +1,7 @@
 package com.bitnei.tools.validator;
 
 
-import com.bitnei.tools.annotation.validator.DateFormat;
+import com.bitnei.tools.annotation.validator.DateFormats;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -14,13 +14,13 @@ import java.text.SimpleDateFormat;
  * @author zhaogd
  * Date: 2017/9/21
  */
-public class DateFormatValidator implements ConstraintValidator<DateFormat, CharSequence> {
+public class DateFormatsValidator implements ConstraintValidator<DateFormats, CharSequence> {
 
-    private String format;
+    private String[] formats;
 
     @Override
-    public void initialize(DateFormat constraintAnnotation) {
-        format = constraintAnnotation.format();
+    public void initialize(DateFormats constraintAnnotation) {
+        formats = constraintAnnotation.formats();
     }
 
     @Override
@@ -32,10 +32,13 @@ public class DateFormatValidator implements ConstraintValidator<DateFormat, Char
 
         // 验证格式
         boolean res = true;
-        try {
-            new SimpleDateFormat(format).parse(value.toString());
-        } catch (ParseException e) {
-            res = false;
+        for (String format : formats) {
+            try {
+                new SimpleDateFormat(format).parse(value.toString());
+            } catch (ParseException e) {
+                res = false;
+                break;
+            }
         }
         return res;
     }
