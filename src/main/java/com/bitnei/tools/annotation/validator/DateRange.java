@@ -32,7 +32,7 @@ public @interface DateRange {
     /**
      * 秒数，默认一天
      */
-    long max() default 60 * 60 * 12;
+    long max() default 60 * 60 * 24;
 
     String message() default "日期间隔验证不通过,规则:[min:{min}s,max:{max}s]";
 
