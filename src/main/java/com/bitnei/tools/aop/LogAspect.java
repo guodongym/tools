@@ -1,6 +1,7 @@
 package com.bitnei.tools.aop;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.bitnei.tools.constant.EmptyObjectConstant;
 import com.bitnei.tools.entity.ArcResponse;
 import com.bitnei.tools.entity.DateFormatEnum;
@@ -54,7 +55,7 @@ public class LogAspect {
         String queryString = EmptyObjectConstant.EMPTY_STRING;
         if (pjp.getArgs() != null && pjp.getArgs().length > 0) {
             // 只拦截第一个参数信息
-            queryString = JSON.toJSONStringWithDateFormat(pjp.getArgs()[0], DateFormatEnum.DATE_TIME.getFormat());
+            queryString = JSON.toJSONStringWithDateFormat(pjp.getArgs()[0], DateFormatEnum.DATE_TIME.getFormat(), SerializerFeature.WriteMapNullValue);
         }
 
         Object result;
@@ -62,7 +63,7 @@ public class LogAspect {
         try {
             result = pjp.proceed();
             ArcResponse response = (ArcResponse) result;
-            resultMeta = JSON.toJSONString(response.getMeta());
+            resultMeta = JSON.toJSONString(response.getMeta(), SerializerFeature.WriteMapNullValue);
         } catch (Throwable e) {
             resultMeta = e.toString();
             throw e;
