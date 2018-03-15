@@ -51,10 +51,10 @@ public class LogAspect {
         String url = request.getRequestURL().toString();
         String method = request.getMethod();
 
-        String queryString = EmptyObjectConstant.EMPTY_STRING;
+        String params = EmptyObjectConstant.EMPTY_STRING;
         if (pjp.getArgs() != null && pjp.getArgs().length > 0) {
             // 只拦截第一个参数信息
-            queryString = JSON.toJSONStringWithDateFormat(pjp.getArgs()[0], DateFormatEnum.DATE_TIME.getFormat());
+            params = JSON.toJSONStringWithDateFormat(pjp.getArgs()[0], DateFormatEnum.DATE_TIME.getFormat());
         }
 
         Object result;
@@ -70,8 +70,8 @@ public class LogAspect {
             // 记录方法执行完成的时间
             long endTimeMillis = System.currentTimeMillis();
 
-            logger.info("executionTime:{}MS, url:{}, method:{}, queryString:{}, resultMeta:{}",
-                    endTimeMillis - startTimeMillis, url, method, queryString, resultMeta);
+            logger.info("executionTime:{}MS, url:{}, method:{}, params:{}, resultMeta:{}",
+                    endTimeMillis - startTimeMillis, url, method, params, resultMeta);
         }
         return result;
     }
