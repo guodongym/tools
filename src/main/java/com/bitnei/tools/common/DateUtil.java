@@ -15,8 +15,8 @@ import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
- * User: zhaogd
- * Date: 2017/8/7
+ *
+ * @author zhaogd
  */
 public class DateUtil {
 

@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * CookieUtils : 针对Http Cookie的工具类 
+ * CookieUtils : 针对Http Cookie的工具类
  *
  * @author bitnei
  * @since 2014-11-27
@@ -110,11 +110,11 @@ public class CookieUtils {
      * @return 值
      */
     public static String getCookie(HttpServletRequest request, HttpServletResponse response, String name, boolean isRemoved) {
-        String value = null;
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals(name)) {
+                    String value = null;
                     try {
                         value = URLDecoder.decode(cookie.getValue(), "UTF-8");
                     } catch (UnsupportedEncodingException e) {
@@ -128,6 +128,6 @@ public class CookieUtils {
                 }
             }
         }
-        return value;
+        return null;
     }
 }

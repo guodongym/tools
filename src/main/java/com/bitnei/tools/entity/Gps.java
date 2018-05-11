@@ -15,8 +15,8 @@ public class Gps {
     }
 
     public Gps(double wgLat, double wgLon) {
-        setWgLat(wgLat);
-        setWgLon(wgLon);
+        this.wgLat = wgLat;
+        this.wgLon = wgLon;
     }
 
     public double getWgLat() {

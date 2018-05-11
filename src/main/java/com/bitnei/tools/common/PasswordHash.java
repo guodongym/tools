@@ -1,32 +1,32 @@
 package com.bitnei.tools.common;
 
-/* 
+/*
  * Password Hashing With PBKDF2 (http://crackstation.net/hashing-security.htm).
  * Copyright (c) 2013, Taylor Hornby
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without 
+ * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *
- * 1. Redistributions of source code must retain the above copyright notice, 
+ * 1. Redistributions of source code must retain the above copyright notice,
  * this list of conditions and the following disclaimer.
  *
  * 2. Redistributions in binary form must reproduce the above copyright notice,
- * this list of conditions and the following disclaimer in the documentation 
+ * this list of conditions and the following disclaimer in the documentation
  * and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE 
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * PBKDF2 salted password hashing. Author: havoc AT defuse.ca www: <br>
  * http://crackstation.net/hashing-security.htm <br>
  */
@@ -40,35 +40,35 @@ import java.security.spec.InvalidKeySpecException;
 
 /**
  * 密码盐渍算法工具类,生成70个字符的密码hash,可以调整SALT_BYTE_SIZE,HASH_BYTE_SIZE来改变
- * <p>
+ *
  * <br>
  * how to use:
- * <p>
+ *
  * <pre>
  * String password = &quot;123456&quot;;
  * boolean success = PasswordHash.validatePassword(password, PasswordHash.createHash(password));
  * </pre>
  **/
 public class PasswordHash {
-    public static final String PBKDF2_ALGORITHM = "PBKDF2WithHmacSHA1";
+    private static final String PBKDF2_ALGORITHM = "PBKDF2WithHmacSHA1";
 
     /**
      * The following constants may be changed without breaking existing hashes.
      */
-    public static final int SALT_BYTE_SIZE = 16;
-    public static final int HASH_BYTE_SIZE = 16;
-    public static final int PBKDF2_ITERATIONS = 1000;
+    private static final int SALT_BYTE_SIZE = 16;
+    private static final int HASH_BYTE_SIZE = 16;
+    private static final int PBKDF2_ITERATIONS = 1000;
 
-    public static final int ITERATION_INDEX = 0;
-    public static final int SALT_INDEX = 1;
-    public static final int PBKDF2_INDEX = 2;
+    private static final int ITERATION_INDEX = 0;
+    private static final int SALT_INDEX = 1;
+    private static final int PBKDF2_INDEX = 2;
 
-    public static final String SEPARATOR = ":";
+    private static final String SEPARATOR = ":";
 
     /**
      * 加盐处理密码,返回处理后的hash
      *
-     * @param password
+     * @param password 密码
      * @return 加盐处理后的hash
      * @throws NoSuchAlgorithmException
      * @throws InvalidKeySpecException
@@ -80,12 +80,12 @@ public class PasswordHash {
     /**
      * 加盐处理密码,返回处理后的hash
      *
-     * @param password
+     * @param password 密码
      * @return 加盐处理后的hash
      * @throws NoSuchAlgorithmException
      * @throws InvalidKeySpecException
      */
-    public static String createHash(char[] password) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    private static String createHash(char[] password) throws NoSuchAlgorithmException, InvalidKeySpecException {
         // Generate a random salt
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[SALT_BYTE_SIZE];
@@ -103,9 +103,8 @@ public class PasswordHash {
      * return true 表示匹配,反之则false
      * </p>
      *
-     * @param password
-     * @param correctHash
-     * @return
+     * @param password    密码
+     * @param correctHash hash
      * @throws NoSuchAlgorithmException
      * @throws InvalidKeySpecException
      */
@@ -119,13 +118,12 @@ public class PasswordHash {
      * return true 表示匹配,反之则false
      * </p>
      *
-     * @param password
-     * @param correctHash
-     * @return
+     * @param password    密码
+     * @param correctHash hash
      * @throws NoSuchAlgorithmException
      * @throws InvalidKeySpecException
      */
-    public static boolean validatePassword(char[] password, String correctHash) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    private static boolean validatePassword(char[] password, String correctHash) throws NoSuchAlgorithmException, InvalidKeySpecException {
         // Decode the hash into its parameters
         String[] params = correctHash.split(SEPARATOR);
         int iterations = Integer.parseInt(params[ITERATION_INDEX]);

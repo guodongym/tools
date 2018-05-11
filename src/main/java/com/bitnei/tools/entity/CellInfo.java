@@ -2,6 +2,9 @@ package com.bitnei.tools.entity;
 
 import java.lang.reflect.Field;
 
+/**
+ * @author zhaogd
+ */
 public class CellInfo implements Comparable<CellInfo> {
 
 	private String name;

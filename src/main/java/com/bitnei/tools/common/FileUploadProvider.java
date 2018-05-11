@@ -85,7 +85,7 @@ public class FileUploadProvider {
 		return DateTool.formatDate(DateTool.currentDate()) + "/" + randomFileName;
 	}
 
-	private final static void scale(InputStream is, String imagePath) throws IOException {
+	private static void scale(InputStream is, String imagePath) throws IOException {
 		BufferedImage src = ImageIO.read(is); // 读入文件
 		int width = src.getWidth(); // 得到源图宽
 		int height = src.getHeight(); // 得到源图长

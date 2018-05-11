@@ -1,59 +1,13 @@
 package com.bitnei.tools.common;
 
 import com.bitnei.tools.entity.TreeNode;
-import org.apache.commons.lang3.StringUtils;
 
-import java.io.CharArrayWriter;
-import java.io.PrintWriter;
 import java.io.Serializable;
 import java.lang.reflect.Method;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Map.Entry;
 
 public class CommonTool {
-
-	/**
-	 * 去除字符串两头的空白字符
-	 */
-	public static String trim(String str) {
-		if (str == null) {
-			return "";
-		}
-		int len = str.length();
-		int st = 0;
-		char[] val = str.toCharArray();
-
-		while (st < len && Character.isWhitespace(val[st])) {
-			st++;
-		}
-		while (st < len && Character.isWhitespace(val[len - 1])) {
-			len--;
-		}
-		return st > 0 || len < val.length ? str.substring(st, len) : str;
-	}
-
-	/**
-	 * 把异常信息转化成字符串
-	 */
-	public static String exception2String(Throwable e) {
-		if (e == null) {
-			return "\"null\"";
-		}
-		CharArrayWriter caw = new CharArrayWriter();
-		PrintWriter pw = new PrintWriter(caw, true);
-		e.printStackTrace(pw);
-		return caw.toString();
-	}
-
-	/**
-	 * 获取系统原子时钟
-	 */
-	public static Date currentTime() {
-		return new Date();
-	}
 
 	/**
 	 * 判断两个对象是否相等
@@ -168,51 +122,6 @@ public class CommonTool {
 				convert(sources.get(i), target);
 			} catch (Exception e) {
 			}
-		}
-	}
-
-	public static String toDate(Date date) {
-		DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
-		return format.format(date);
-	}
-
-	public static String toDateTime(Date date) {
-		if (date == null) {
-			return null;
-		}
-		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
-		return format.format(date);
-	}
-
-	public static Date fromDate(String str) {
-		if (str == null) {
-			return null;
-		}
-		if (StringUtils.isBlank(str)) {
-			return null;
-		}
-		try {
-			DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
-			return format.parse(str);
-		} catch (ParseException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-	}
-
-	public static Date fromDateTime(String str) {
-		if (str == null) {
-			return null;
-		}
-		if (StringUtils.isBlank(str)) {
-			return null;
-		}
-		try {
-			DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
-			return format.parse(str);
-		} catch (ParseException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
 		}
 	}
 
