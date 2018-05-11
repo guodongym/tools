@@ -1,13 +1,13 @@
 package com.bitnei.tools.common;
 
-import com.bitnei.tools.annotation.Sheet;
 import com.bitnei.tools.annotation.Cell;
+import com.bitnei.tools.annotation.Sheet;
 import com.bitnei.tools.entity.CellInfo;
+import com.bitnei.tools.entity.CustomSheet;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -17,14 +17,75 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
 
-@Service
+/**
+ * Excel导出工具
+ *
+ * @author zhaogd
+ */
 public class ExcelExporter {
 
-    private static final int DEFAULT_PAGE_SIZE = 1000;
+    private static final int DEFAULT_PAGE_SIZE = 10000;
 
-    private static final String LOCK = "";
+    /**
+     * 导出空excel
+     *
+     * @param out 输出流
+     * @throws Exception 异常抛出
+     */
+    public static void exportEmpty(OutputStream out) throws Exception {
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        workbook.createSheet();
+        workbook.setSheetName(0, "无数据");
+        workbook.write(out);
+        out.flush();
+        out.close();
+    }
 
-    private static final Map<Class<?>, List<CellInfo>> FIELD_INFO_MAP = new HashMap<Class<?>, List<CellInfo>>(20);
+    /**
+     * 导出定制化sheet,每个sheet内容可以不同
+     *
+     * @param customSheets 定制化实体
+     * @param out          输出流
+     * @param pageSize     每页条数
+     * @throws Exception 异常抛出
+     */
+    public static void exportCustomSheet(List<CustomSheet> customSheets, OutputStream out, int pageSize) throws Exception {
+        try {
+            HSSFWorkbook workbook = new HSSFWorkbook();
+
+            int sheetIndex = 0;
+            for (CustomSheet customSheet : customSheets) {
+                List<?> records = customSheet.getRecords();
+                int pageCount = getPageCount(pageSize, records.size());
+                HSSFCellStyle headerStyle = generatorHeaderStyle(workbook);
+                HSSFCellStyle cellStyle = generatorCellStyle(workbook);
+                List<CellInfo> cellInfos = getCellInfos(customSheet.getClazz());
+
+                // 如果没数据只写头
+                if (records.size() == 0) {
+                    HSSFSheet sheet = workbook.createSheet();
+                    workbook.setSheetName(sheetIndex, customSheet.getSheetName() + 1);
+                    generatorHeader(sheet, cellInfos, headerStyle);
+                    sheetIndex++;
+                } else {
+                    for (int pageIndex = 0; pageIndex < pageCount; pageIndex++) {
+                        HSSFSheet sheet = workbook.createSheet();
+                        workbook.setSheetName(sheetIndex, customSheet.getSheetName() + (pageIndex + 1));
+                        generatorHeader(sheet, cellInfos, headerStyle);
+                        List<?> data = records.subList(pageSize * pageIndex, getTargetPageSize(records, pageSize, pageIndex));
+                        generatorCells(data, sheet, cellInfos, cellStyle);
+
+                        sheetIndex++;
+                    }
+                }
+            }
+            workbook.write(out);
+        } finally {
+            out.flush();
+            out.close();
+        }
+    }
+
 
     public static void export(List<?> records, Class<?> clazz, OutputStream out) throws Exception {
         export(records, clazz, out, DEFAULT_PAGE_SIZE);
@@ -97,6 +158,7 @@ public class ExcelExporter {
         HSSFRow row = sheet.createRow(0);
         for (int i = 0; i < cellInfos.size(); i++) {
             CellInfo cellInfo = cellInfos.get(i);
+            sheet.setColumnWidth(i, 30 * 256);
             HSSFCell cell = row.createCell(i);
             cell.setCellValue(cellInfo.getName());
             cell.setCellStyle(headerStyle);
@@ -142,10 +204,10 @@ public class ExcelExporter {
                 } else if (Boolean.class.equals(type) || boolean.class.equals(type)) {
                     cell.setCellValue((Boolean) value);
                 } else if (Date.class.equals(type)) {
-                    Date date = (Date) value;
-                    if (date == null) {
-                        cell.setCellValue((String) cellInfo.getDefaultValue());
+                    if (value instanceof String) {
+                        cell.setCellValue((String) value);
                     } else {
+                        Date date = (Date) value;
                         DateFormat format = new SimpleDateFormat(cellInfo.getFormat());
                         cell.setCellValue(format.format(date));
                     }
@@ -155,37 +217,29 @@ public class ExcelExporter {
     }
 
     private static List<CellInfo> getCellInfos(Class<?> clazz) {
-        List<CellInfo> cellInfos = FIELD_INFO_MAP.get(clazz);
-        if (cellInfos == null) {
-            synchronized (LOCK) {
-                if (cellInfos == null) {
-                    cellInfos = new ArrayList<CellInfo>();
-                    FIELD_INFO_MAP.put(clazz, cellInfos);
-                    List<Field> fields = getAllFields(clazz);
-                    for (Field field : fields) {
-                        Cell cell = field.getAnnotation(Cell.class);
-                        if (cell == null) {
-                            continue;
-                        }
-                        field.setAccessible(true);
-                        CellInfo cellInfo = new CellInfo();
-                        cellInfo.setName(cell.name());
-                        cellInfo.setOrder(cell.order());
-                        cellInfo.setField(field);
-                        cellInfo.setFormat(cell.format());
-                        cellInfo.setDefaultValue(cell.defaultValue());
-                        cellInfos.add(cellInfo);
-                    }
-                    Collections.sort(cellInfos);
-                    return cellInfos;
-                }
+        List<CellInfo> cellInfos = new ArrayList<>();
+
+        List<Field> fields = getAllFields(clazz);
+        for (Field field : fields) {
+            Cell cell = field.getAnnotation(Cell.class);
+            if (cell == null) {
+                continue;
             }
+            field.setAccessible(true);
+            CellInfo cellInfo = new CellInfo();
+            cellInfo.setName(cell.name());
+            cellInfo.setOrder(cell.order());
+            cellInfo.setField(field);
+            cellInfo.setFormat(cell.format());
+            cellInfo.setDefaultValue(cell.defaultValue());
+            cellInfos.add(cellInfo);
         }
+        Collections.sort(cellInfos);
         return cellInfos;
     }
 
     private static List<Field> getAllFields(Class<?> clazz) {
-        List<Field> allFields = new ArrayList<Field>();
+        List<Field> allFields = new ArrayList<>();
         addAllFields(clazz, allFields);
         return allFields;
     }

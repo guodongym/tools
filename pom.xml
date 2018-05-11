@@ -35,6 +35,7 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
             <version>${springframe.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- aop and proxy -->
@@ -42,6 +43,7 @@
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
             <version>1.8.13</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- commons -->
