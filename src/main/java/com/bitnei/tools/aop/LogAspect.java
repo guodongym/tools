@@ -29,17 +29,33 @@ public class LogAspect {
 
     private static Logger logger = LoggerFactory.getLogger(LogAspect.class);
 
+    @Pointcut(value = "@annotation(org.springframework.web.bind.annotation.RequestMapping) " +
+            "|| @annotation(org.springframework.web.bind.annotation.GetMapping)" +
+            "|| @annotation(org.springframework.web.bind.annotation.PostMapping)" +
+            "|| @annotation(org.springframework.web.bind.annotation.PutMapping)" +
+            "|| @annotation(org.springframework.web.bind.annotation.DeleteMapping)")
+    public void requestMappingMethodPointcut() {
+    }
+
+    @Pointcut(value = "@within(org.springframework.web.bind.annotation.RestController)")
+    public void responseBodyMethodPointcut() {
+    }
+
+    @Pointcut(value = "execution(* com.bitnei..*Controller.*(..)))")
+    public void controllerMethodPointcut() {
+    }
+
     /**
      * 切点，controller包下所有带有RequestMapping注解的方法
      */
-    @Pointcut("execution(* com.bitnei..*Controller.*(..))) && @annotation(org.springframework.web.bind.annotation.RequestMapping)")
-    public void controllerMethodPointcut() {
+    @Pointcut(value = "controllerMethodPointcut() && responseBodyMethodPointcut() && requestMappingMethodPointcut()")
+    public void restControllerMethodPointcut() {
     }
 
     /**
      * 记录访问日志
      */
-    @Around("controllerMethodPointcut()")
+    @Around("restControllerMethodPointcut()")
     public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
         // 记录方法开始执行的时间
         long startTimeMillis = System.currentTimeMillis();
