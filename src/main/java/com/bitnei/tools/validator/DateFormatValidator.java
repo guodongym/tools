@@ -2,11 +2,14 @@ package com.bitnei.tools.validator;
 
 
 import com.bitnei.tools.annotation.validator.DateFormat;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * 日期格式验证
@@ -15,6 +18,8 @@ import java.text.SimpleDateFormat;
  * Date: 2017/9/21
  */
 public class DateFormatValidator implements ConstraintValidator<DateFormat, CharSequence> {
+
+    private static final Logger logger = LoggerFactory.getLogger(DateFormatValidator.class);
 
     private String format;
 
@@ -31,12 +36,23 @@ public class DateFormatValidator implements ConstraintValidator<DateFormat, Char
         }
 
         // 验证格式
-        boolean res = true;
         try {
-            new SimpleDateFormat(format).parse(value.toString());
+            validateDatePattern(value, format);
         } catch (ParseException e) {
-            res = false;
+            logger.warn("日期检验不通过, {} format: \"{}\"", e.getMessage(), format);
+            return false;
         }
-        return res;
+        return true;
+    }
+
+    static void validateDatePattern(CharSequence value, String format) throws ParseException {
+        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+        simpleDateFormat.setLenient(false);
+        final String valueString = value.toString();
+        final Date date = simpleDateFormat.parse(valueString);
+
+        if (!simpleDateFormat.format(date).equals(valueString)) {
+            throw new ParseException("Unparseable date: \"" + valueString + "\"", -1);
+        }
     }
 }

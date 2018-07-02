@@ -252,6 +252,31 @@ public class DateUtil {
     }
 
     /**
+     * 获取指定日期的小时起始值, e.g: 2014-11-11 10:11:22 -> 2014-11-11 10:00:00
+     */
+    public static Date getHourStartByDate(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        return calendar.getTime();
+    }
+
+    /**
+     * 获取指定日期的小时起始值, e.g: 2014-11-11 10:11:22 -> 2014-11-11 10:00:00
+     *
+     * @param dateString 字符串日期
+     * @param format     格式化
+     * @return 格式化之后字符串，格式化类型DateFormatEnum.DATE_TIME
+     */
+    public static String getHourStartByDate(String dateString, DateFormatEnum format) throws ParseException {
+        Date date = convertString2Date(dateString, format);
+        Date startDate = getDateStartByDate(date);
+        return convertDate2String(startDate, DateFormatEnum.DATE_TIME);
+    }
+
+
+    /**
      * 获取30天之前的日期
      *
      * @return 格式化之后日期

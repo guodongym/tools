@@ -2,11 +2,12 @@ package com.bitnei.tools.validator;
 
 
 import com.bitnei.tools.annotation.validator.DateFormats;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 /**
  * 日期格式验证
@@ -15,6 +16,8 @@ import java.text.SimpleDateFormat;
  * Date: 2017/9/21
  */
 public class DateFormatsValidator implements ConstraintValidator<DateFormats, CharSequence> {
+
+    private static final Logger logger = LoggerFactory.getLogger(DateFormatsValidator.class);
 
     private String[] formats;
 
@@ -31,15 +34,17 @@ public class DateFormatsValidator implements ConstraintValidator<DateFormats, Ch
         }
 
         // 验证格式
-        boolean res = true;
+        int errCount = 0;
         for (String format : formats) {
             try {
-                new SimpleDateFormat(format).parse(value.toString());
+                DateFormatValidator.validateDatePattern(value, format);
             } catch (ParseException e) {
-                res = false;
-                break;
+                errCount++;
             }
         }
-        return res;
+        if (errCount == formats.length) {
+            logger.warn("日期检验不通过, date: \"{}\" formats: \"{}\"", value, formats);
+        }
+        return errCount < formats.length;
     }
 }
