@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -21,6 +23,50 @@ import java.util.List;
 public class DateUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(DateUtil.class);
+
+    /**
+     * 把时间字符串转换为 {@link LocalDateTime}
+     *
+     * @param date   时间字符串
+     * @param format 格式
+     * @return 时间
+     */
+    public static LocalDateTime parseToLocalDateTime(String date, String format) {
+        return LocalDateTime.parse(date, DateTimeFormatter.ofPattern(format));
+    }
+
+    /**
+     * 把日期字符串转换为 {@link LocalDate}
+     *
+     * @param date   日期字符串
+     * @param format 格式
+     * @return 日期
+     */
+    public static LocalDate parseToLocalDate(String date, String format) {
+        return LocalDate.parse(date, DateTimeFormatter.ofPattern(format));
+    }
+
+    /**
+     * 把本地时间转换为带时区偏移的ISO格式 {@link DateTimeFormatter#ISO_OFFSET_DATE_TIME}
+     *
+     * @param localDateTime 原始时间
+     * @return 转换后的时间
+     */
+    public static String convertToZonedDateTime(LocalDateTime localDateTime) {
+        return DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(localDateTime.atZone(ZoneId.systemDefault()));
+    }
+
+    /**
+     * 把本地时间转换为带时区偏移的ISO格式 {@link DateTimeFormatter#ISO_OFFSET_DATE}
+     *
+     * @param localDate 原始日期
+     * @return 转换后的日期
+     */
+    public static String convertToZonedDate(LocalDate localDate) {
+        final ZonedDateTime zonedDateTime = ZonedDateTime.of(localDate, LocalTime.now(), ZoneId.systemDefault());
+        return DateTimeFormatter.ISO_OFFSET_DATE.format(zonedDateTime);
+    }
+
 
     /**
      * 昨天
