@@ -4,8 +4,10 @@ import com.bitnei.tools.core.entity.DateFormatEnum;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Created on 2019/6/6.
@@ -44,4 +46,12 @@ class DateUtilTest {
 
         Assertions.assertEquals("2019-06-11+08:00", zonedDateTime);
     }
+
+    @Test
+    void getMonthBetween() throws ParseException {
+        List<String> monthBetween = DateUtil.getMonthBetween("201710", "201802");
+        String[] month = {"201710", "201711", "201712", "201801", "201802"};
+        Assertions.assertArrayEquals(monthBetween.toArray(), month);
+    }
+
 }

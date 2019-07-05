@@ -39,6 +39,11 @@ public enum DateFormatEnum {
     DATE_TIME("yyyy-MM-dd HH:mm:ss"),
 
     /**
+     * 带时区的年月日时分秒格式,2019-06-15T11:20:49+08:00
+     */
+    ISO_OFFSET_DATE_TIME("yyyy-MM-dd'T'HH:mm:ssXXX"),
+
+    /**
      * 年月日时分秒格式不包含分隔符,yyyyMMddHHmmss
      */
     DATE_TIME_NO_SEPARATOR("yyyyMMddHHmmss");
