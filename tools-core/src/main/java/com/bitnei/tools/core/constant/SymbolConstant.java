@@ -19,6 +19,15 @@ public class SymbolConstant {
     /** 下划线 */
     public static final String UNDER_LINE = "_";
 
+    /**
+     * 竖线
+     */
+    public static final String VERTICAL_LINE = "|";
+    /**
+     * 竖线正则
+     */
+    public static final String VERTICAL_LINE_REG = "\\|";
+
     /** ; */
     public final static String SEMICOLON = ";";
 
