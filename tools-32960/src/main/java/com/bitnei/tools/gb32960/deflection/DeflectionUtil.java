@@ -2,6 +2,7 @@ package com.bitnei.tools.gb32960.deflection;
 
 import com.bitnei.tools.core.constant.SymbolConstant;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -19,6 +20,22 @@ import java.util.Map;
  */
 public class DeflectionUtil {
     private DeflectionUtil() {
+    }
+
+    /**
+     * 对GB_32960数据项偏移、系数处理
+     *
+     * @param realinfoMap 数据, map中的value是object类型的string
+     * @return 偏移后的结果
+     */
+    public static Map<String, String> doDeflectionWithObjectMap(Map<String, Object> realinfoMap) {
+        Map<String, String> dataMap = Maps.newHashMap();
+        realinfoMap.forEach((k, v) -> {
+            dataMap.put(k, (String) v);
+        });
+
+        doDeflection(dataMap);
+        return dataMap;
     }
 
     /**

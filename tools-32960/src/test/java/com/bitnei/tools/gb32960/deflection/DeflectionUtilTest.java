@@ -36,8 +36,18 @@ class DeflectionUtilTest {
     @Test
     void doDeflection() {
         DeflectionUtil.doDeflection(dataMap);
+        validate(dataMap);
+    }
 
-        final Map<String, String> data = dataMap;
+    @Test
+    void doDeflectionWithObjectMap() {
+        Map<String, Object> objectMap = new HashMap<>();
+        dataMap.forEach(objectMap::put);
+        final Map<String, String> stringMap = DeflectionUtil.doDeflectionWithObjectMap(objectMap);
+        validate(stringMap);
+    }
+
+    private void validate(Map<String, String> data) {
         final String expected2103 = "MToxOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOF8xOA==";
         assertEquals(expected2103, data.get("2103"));
 
@@ -60,8 +70,8 @@ class DeflectionUtilTest {
             dataMap.put("2103", "");
             DeflectionUtil.doDeflection(dataMap);
 
-            assertEquals("",dataMap.get("2402"));
-            assertEquals("",dataMap.get("2103"));
+            assertEquals("", dataMap.get("2402"));
+            assertEquals("", dataMap.get("2103"));
         }
     }
 }
