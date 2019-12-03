@@ -1,5 +1,6 @@
 package com.bitnei.tools.gb32960.convert;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.bitnei.tools.gb32960.constant.Constant;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -34,14 +35,14 @@ public class RealinfoValidator {
         }
 
         // 规则没有设置直接放行
-        if (allowMessageTypes.isEmpty() && notAllowMessageTypes.isEmpty()) {
+        if (CollectionUtil.isEmpty(allowMessageTypes) && CollectionUtil.isEmpty(notAllowMessageTypes)) {
             return false;
         }
 
         // 判断消息类型
         final String messageType = fields[3];
         final boolean isAllow;
-        if (allowMessageTypes.isEmpty()) {
+        if (CollectionUtil.isEmpty(allowMessageTypes)) {
             isAllow = !notAllowMessageTypes.contains(messageType);
         } else {
             isAllow = allowMessageTypes.contains(messageType);

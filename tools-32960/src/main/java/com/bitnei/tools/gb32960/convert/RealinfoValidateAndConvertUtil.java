@@ -19,6 +19,10 @@ public class RealinfoValidateAndConvertUtil {
     private RealinfoValidateAndConvertUtil() {
     }
 
+    public static Map<String, String> convertToMap(String origBody) {
+        return convertToMap(origBody, null, null);
+    }
+
     public static Map<String, String> convertToMap(String origBody, List<String> allowMessageTypes, List<String> notAllowMessageTypes) {
         // 判断数据格式是否有误
         String[] fields = origBody.split(Constant.BLANK_SPACE);

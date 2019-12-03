@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
  * Created by IntelliJ IDEA.
  *
  * @author zhaogd
- * @Date 2018/7/3
+ * @date 2018/7/3
  */
 public class RegexCheckUtil {
 
