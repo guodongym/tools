@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 /**
@@ -17,38 +18,50 @@ import java.util.List;
 class DateUtilTest {
 
     @Test
-    void parseToLocalDateTime() {
-        final LocalDateTime localDateTime = DateUtil.parseToLocalDateTime("2019-06-11 05:45:23", DateFormatEnum.DATE_TIME.getFormat());
-
-        Assertions.assertEquals("2019-06-11T05:45:23", localDateTime.toString());
-    }
-    @Test
-    void parseToLocalDate() {
-        final LocalDate localDate = DateUtil.parseToLocalDate("2019-06-11", DateFormatEnum.DATE.getFormat());
-
-        Assertions.assertEquals("2019-06-11", localDate.toString());
+    void convertDateStringToDayStartEpochMilli() {
+        final long epochMilli = DateUtil.convertDateStringToDayStartEpochMilli("20190101", "yyyyMMdd");
+        Assertions.assertEquals(1546272000000L, epochMilli);
     }
 
+    @Test
+    void convertDateStringToDayEndEpochMilli() {
+        final long epochMilli = DateUtil.convertDateStringToDayEndEpochMilli("20190101", "yyyyMMdd");
+        Assertions.assertEquals(1546358399999L, epochMilli);
+    }
 
     @Test
-    void convertToZonedDateTime() {
-        final LocalDateTime localDateTime = DateUtil.parseToLocalDateTime("2019-06-11 05:45:23", DateFormatEnum.DATE_TIME.getFormat());
-        final String zonedDateTime = DateUtil.convertToZonedDateTime(localDateTime);
+    void testConvertDateTimeToEpochMilli() {
+        final long epochMilli = DateUtil.convertDateTimeToEpochMilli(LocalDate.of(2019, 1, 1), LocalTime.MIN);
+        Assertions.assertEquals(1546272000000L, epochMilli);
+    }
 
+    @Test
+    void testConvertDateTimeStringToEpochMilli() {
+        final long epochMilli = DateUtil.convertDateTimeStringToEpochMilli("20190101000000", "yyyyMMddHHmmss");
+        Assertions.assertEquals(1546272000000L, epochMilli);
+    }
+
+    @Test
+    void convertDateTimeToEpochMilli() {
+        final LocalDateTime localDateTime = LocalDateTime.of(LocalDate.of(2019, 1, 1), LocalTime.MIN);
+        final long epochMilli = DateUtil.convertDateTimeToEpochMilli(localDateTime);
+        Assertions.assertEquals(1546272000000L, epochMilli);
+    }
+
+    @Test
+    void testConvertToZonedDateTime() {
+        final String zonedDateTime = DateUtil.convertToZonedDateTime("2019-06-11 05:45:23", DateFormatEnum.DATE_TIME.getFormat());
         Assertions.assertEquals("2019-06-11T05:45:23+08:00", zonedDateTime);
     }
 
-
     @Test
-    void convertToZonedDate() {
-        final LocalDate localDate = DateUtil.parseToLocalDate("2019-06-11", DateFormatEnum.DATE.getFormat());
-        final String zonedDateTime = DateUtil.convertToZonedDate(localDate);
-
+    void testConvertToZonedDate() {
+        final String zonedDateTime = DateUtil.convertToZonedDate("2019-06-11", DateFormatEnum.DATE.getFormat());
         Assertions.assertEquals("2019-06-11+08:00", zonedDateTime);
     }
 
     @Test
-    void getMonthBetween() throws ParseException {
+    void testGetMonthBetween() throws ParseException {
         List<String> monthBetween = DateUtil.getMonthBetween("201710", "201802");
         String[] month = {"201710", "201711", "201712", "201801", "201802"};
         Assertions.assertArrayEquals(monthBetween.toArray(), month);

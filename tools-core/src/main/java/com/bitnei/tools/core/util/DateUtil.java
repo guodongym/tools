@@ -25,25 +25,75 @@ public class DateUtil {
     private static final Logger logger = LoggerFactory.getLogger(DateUtil.class);
 
     /**
-     * 把时间字符串转换为 {@link LocalDateTime}
+     * 把日期字符串转换为日期当天开始的毫秒数
      *
-     * @param date   时间字符串
-     * @param format 格式
-     * @return 时间
+     * @param dateString 日期字符串
+     * @param pattern    格式化规则
+     * @return 毫秒数
      */
-    public static LocalDateTime parseToLocalDateTime(String date, String format) {
-        return LocalDateTime.parse(date, DateTimeFormatter.ofPattern(format));
+    public static long convertDateStringToDayStartEpochMilli(String dateString, String pattern) {
+        final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(pattern);
+        final LocalDate localDate = LocalDate.parse(dateString, dateTimeFormatter);
+        return convertDateTimeToEpochMilli(localDate, LocalTime.MIN);
     }
 
     /**
-     * 把日期字符串转换为 {@link LocalDate}
+     * 把日期字符串转换为日期当天结束的毫秒数
      *
-     * @param date   日期字符串
-     * @param format 格式
-     * @return 日期
+     * @param dateString 日期字符串
+     * @param pattern    格式化规则
+     * @return 毫秒数
      */
-    public static LocalDate parseToLocalDate(String date, String format) {
-        return LocalDate.parse(date, DateTimeFormatter.ofPattern(format));
+    public static long convertDateStringToDayEndEpochMilli(String dateString, String pattern) {
+        final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(pattern);
+        final LocalDate localDate = LocalDate.parse(dateString, dateTimeFormatter);
+        return convertDateTimeToEpochMilli(localDate, LocalTime.MAX);
+    }
+
+    /**
+     * 把本地时间转换为从纪元开始的毫秒数
+     *
+     * @param localDate 本地日期
+     * @param localTime 本地时间
+     * @return 毫秒数
+     */
+    public static long convertDateTimeToEpochMilli(LocalDate localDate, LocalTime localTime) {
+        return localDate.atTime(localTime).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+    }
+
+    /**
+     * 把时间字符串转换为从纪元开始的毫秒数
+     *
+     * @param dateTimeString 时间字符串
+     * @param pattern        格式化规则
+     * @return 毫秒数
+     */
+    public static long convertDateTimeStringToEpochMilli(String dateTimeString, String pattern) {
+        final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(pattern);
+        final LocalDateTime localDateTime = LocalDateTime.parse(dateTimeString, dateTimeFormatter);
+        return convertDateTimeToEpochMilli(localDateTime);
+    }
+
+    /**
+     * 把本地时间转换为从纪元开始的毫秒数
+     *
+     * @param localDateTime 本地时间
+     * @return 毫秒数
+     */
+    public static long convertDateTimeToEpochMilli(LocalDateTime localDateTime) {
+        return localDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+    }
+
+    /**
+     * 把时间字符串转换为带时区偏移的ISO格式 {@link DateTimeFormatter#ISO_OFFSET_DATE_TIME}
+     *
+     * @param dateTimeString 时间字符串
+     * @param pattern        格式化规则
+     * @return 时间
+     */
+    public static String convertToZonedDateTime(String dateTimeString, String pattern) {
+        final LocalDateTime localDateTime = LocalDateTime.parse(dateTimeString, DateTimeFormatter.ofPattern(pattern));
+        return convertToZonedDateTime(localDateTime);
     }
 
     /**
@@ -54,6 +104,18 @@ public class DateUtil {
      */
     public static String convertToZonedDateTime(LocalDateTime localDateTime) {
         return DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(localDateTime.atZone(ZoneId.systemDefault()));
+    }
+
+    /**
+     * 把日期字符串转换为带时区偏移的ISO格式 {@link DateTimeFormatter#ISO_OFFSET_DATE_TIME}
+     *
+     * @param dateString 日期字符串
+     * @param pattern    格式化规则
+     * @return 日期
+     */
+    public static String convertToZonedDate(String dateString, String pattern) {
+        final LocalDate localDate = LocalDate.parse(dateString, DateTimeFormatter.ofPattern(pattern));
+        return convertToZonedDate(localDate);
     }
 
     /**
