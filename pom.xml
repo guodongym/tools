@@ -19,9 +19,9 @@
     </modules>
 
     <properties>
-        <springframe.version>5.1.7.RELEASE</springframe.version>
+        <springframe.version>5.2.3.RELEASE</springframe.version>
         <project.build.jdk>1.8</project.build.jdk>
-        <junit.jupiter.version>5.4.2</junit.jupiter.version>
+        <junit.jupiter.version>5.5.2</junit.jupiter.version>
 
         <versions-maven-plugin.version>2.7</versions-maven-plugin.version>
     </properties>
@@ -31,14 +31,14 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.8.1</version>
+            <version>3.9</version>
         </dependency>
 
         <!-- log -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.26</version>
+            <version>1.7.30</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
