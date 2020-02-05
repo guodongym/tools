@@ -1,14 +1,14 @@
-package com.bitnei.tools.web.global;
+package com.bitnei.tools.web.handler;
 
 import com.bitnei.tools.web.entity.GlobalExceptionResponse;
 import com.bitnei.tools.web.exception.InternalServerException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -30,9 +30,8 @@ import java.util.Set;
  * @since 2017-04-16 16:21
  */
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
-    private static Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
-
     /**
      * 处理所有未识别的异常
      */
@@ -40,7 +39,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
     public GlobalExceptionResponse handleException(HttpServletRequest req, Throwable ex) {
-        logger.error("系统内部错误==>" + getString(req), ex);
+        log.error("系统内部错误==>" + getString(req), ex);
         return GlobalExceptionResponse.create(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
     }
 
@@ -51,7 +50,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
     public GlobalExceptionResponse handleHttp404Exception(HttpServletRequest req, NoHandlerFoundException ex) {
-        logger.warn("NoHandlerFound==>{}{}", getString(req), ex.getMessage());
+        log.warn("NoHandlerFound==>{}{}", getString(req), ex.getMessage());
         return GlobalExceptionResponse.create(HttpStatus.NOT_FOUND.value(), ex.getMessage());
     }
 
@@ -62,7 +61,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     @ResponseBody
     public GlobalExceptionResponse handleHttp405Exception(HttpServletRequest req, HttpRequestMethodNotSupportedException ex) {
-        logger.warn("不支持的Method==>{}{}", getString(req), ex.getMessage());
+        log.warn("不支持的Method==>{}{}", getString(req), ex.getMessage());
         return GlobalExceptionResponse.create(HttpStatus.METHOD_NOT_ALLOWED.value(), ex.getMessage());
     }
 
@@ -73,7 +72,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public GlobalExceptionResponse handleMethodArgumentNotValidException(HttpServletRequest req, MethodArgumentNotValidException ex) {
-        logger.warn("参数校验异常==>{}{}", getString(req), ex.getMessage());
+        log.warn("参数校验异常==>{}{}", getString(req), ex.getMessage());
         return GlobalExceptionResponse.create(HttpStatus.BAD_REQUEST.value(), getDefaultMessage(ex.getBindingResult()));
     }
 
@@ -84,7 +83,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public GlobalExceptionResponse handleBindException(HttpServletRequest req, BindException ex) {
-        logger.warn("参数校验异常==>{}{}", getString(req), ex.getMessage());
+        log.warn("参数校验异常==>{}{}", getString(req), ex.getMessage());
         return GlobalExceptionResponse.create(HttpStatus.BAD_REQUEST.value(), getDefaultMessage(ex.getBindingResult()));
     }
 
@@ -95,7 +94,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public GlobalExceptionResponse handleConstraintViolationException(HttpServletRequest req, ConstraintViolationException ex) {
-        logger.warn("参数校验异常==>{}{}", getString(req), ex.getMessage());
+        log.warn("参数校验异常==>{}{}", getString(req), ex.getMessage());
         return GlobalExceptionResponse.create(HttpStatus.BAD_REQUEST.value(), extractMessage(ex.getConstraintViolations()));
     }
 
@@ -106,7 +105,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public GlobalExceptionResponse handleHttpMessageNotReadableException(HttpServletRequest req, HttpMessageNotReadableException ex) {
-        logger.warn("接口参数反序列化异常==>{}{}", getString(req), ex.getMessage());
+        log.warn("接口参数反序列化异常==>{}{}", getString(req), ex.getMessage());
         return GlobalExceptionResponse.create(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
     }
 
@@ -117,7 +116,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
     public GlobalExceptionResponse handleInternalServerException(HttpServletRequest req, InternalServerException ex) {
-        logger.error("内部处理出错==>{}{}", getString(req), ex.getMessage());
+        log.error("内部处理出错==>{}{}", getString(req), ex.getMessage());
         return GlobalExceptionResponse.create(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
     }
 
@@ -135,7 +134,8 @@ public class GlobalExceptionHandler {
     private String getDefaultMessage(BindingResult bindingResult) {
         FieldError fieldError = bindingResult.getFieldError();
         if (fieldError == null) {
-            return bindingResult.getGlobalError().getDefaultMessage();
+            final ObjectError globalError = bindingResult.getGlobalError();
+            return globalError != null ? globalError.getDefaultMessage() : "";
         } else {
             return fieldError.getDefaultMessage();
         }
@@ -147,9 +147,9 @@ public class GlobalExceptionHandler {
      * @param constraintViolations 信息列表
      * @return 格式化后的信息
      */
-    private String extractMessage(Set<? extends ConstraintViolation> constraintViolations) {
+    private String extractMessage(Set<? extends ConstraintViolation<?>> constraintViolations) {
         StringBuilder builder = new StringBuilder();
-        for (ConstraintViolation violation : constraintViolations) {
+        for (ConstraintViolation<?> violation : constraintViolations) {
             builder.append(violation.getMessage()).append(",").append(violation.getInvalidValue()).append(";");
         }
         return builder.toString();
