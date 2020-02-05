@@ -23,8 +23,12 @@ public class StringUtil {
 
         String[] sourceIncludes = new String[fieldNames.length];
         for (int i = 0; i < fieldNames.length; i++) {
-            sourceIncludes[i] = CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldNames[i]);
+            sourceIncludes[i] = camelToUnderscore(fieldNames[i]);
         }
         return sourceIncludes;
+    }
+
+    public static String camelToUnderscore(String fieldName) {
+        return CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName);
     }
 }
