@@ -1,5 +1,6 @@
 package com.bitnei.tools.web.handler;
 
+import com.bitnei.tools.web.entity.GlobalExceptionResponse;
 import com.bitnei.tools.web.entity.GlobalResponse;
 import com.bitnei.tools.web.interceptor.ResponseResultInterceptor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +40,9 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
 
     @Override
     public Object beforeBodyWrite(Object body, @Nonnull MethodParameter returnType, @Nonnull MediaType selectedContentType, @Nonnull Class<? extends HttpMessageConverter<?>> selectedConverterType, @Nonnull ServerHttpRequest request, @Nonnull ServerHttpResponse response) {
+        if (body instanceof GlobalExceptionResponse || body instanceof GlobalResponse) {
+            return body;
+        }
         return GlobalResponse.success(body);
     }
 }
