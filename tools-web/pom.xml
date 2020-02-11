@@ -11,11 +11,26 @@
 
     <artifactId>tools-web</artifactId>
 
+    <properties>
+        <swagger.version>2.9.2</swagger.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.bitnei.bigdata</groupId>
             <artifactId>tools-core</artifactId>
             <version>${project.parent.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${swagger.version}</version>
         </dependency>
 
         <!-- web -->
