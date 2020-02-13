@@ -5,6 +5,7 @@ import com.bitnei.tools.core.constant.EmptyObjectConstant;
 import com.bitnei.tools.core.entity.DateFormatEnum;
 import com.bitnei.tools.web.entity.GlobalResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -88,7 +89,9 @@ public class LogAspect {
             log.info("CLASS_METHOD: {}", pjp.getSignature().getDeclaringTypeName() + "." + pjp.getSignature().getName());
             log.info("参数: {}", params);
             log.info("返回值: {}", resultData);
-            log.info("异常信息: {}", resultMeta);
+            if (StringUtils.isNotBlank(resultMeta)) {
+                log.info("异常信息: {}", resultMeta);
+            }
             log.info("执行时间: {} ms", endTimeMillis - startTimeMillis);
         }
         log.info("=====================================Method  End====================================");
