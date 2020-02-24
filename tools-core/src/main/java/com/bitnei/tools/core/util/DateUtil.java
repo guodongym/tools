@@ -25,6 +25,23 @@ public class DateUtil {
     private static final Logger logger = LoggerFactory.getLogger(DateUtil.class);
 
     /**
+     * 日期字符串格式转换
+     *
+     * @param dateTimeString 日期字符串
+     * @param pattern        格式化模式
+     * @param newPattern     新的格式化模式
+     * @return 抓换后的字符串
+     */
+    public static String stringToNewPattern(String dateTimeString, String pattern, String newPattern) {
+        if (StringUtils.isBlank(dateTimeString)) {
+            return dateTimeString;
+        }
+        final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(pattern);
+        final DateTimeFormatter newDateTimeFormatter = DateTimeFormatter.ofPattern(newPattern);
+        return LocalDateTime.parse(dateTimeString, dateTimeFormatter).format(newDateTimeFormatter);
+    }
+
+    /**
      * 把纪元开始的毫秒数转换为日期字符串
      *
      * @param epochMilli 毫秒数
