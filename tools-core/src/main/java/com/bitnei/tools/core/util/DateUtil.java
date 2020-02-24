@@ -10,6 +10,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -38,7 +39,14 @@ public class DateUtil {
         }
         final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(pattern);
         final DateTimeFormatter newDateTimeFormatter = DateTimeFormatter.ofPattern(newPattern);
-        return LocalDateTime.parse(dateTimeString, dateTimeFormatter).format(newDateTimeFormatter);
+
+        String newDateString = "";
+        try {
+            newDateString = LocalDateTime.parse(dateTimeString, dateTimeFormatter).format(newDateTimeFormatter);
+        } catch (DateTimeParseException e) {
+            logger.error("字符串日期不合法 [{}] [{}]", dateTimeString, pattern, e);
+        }
+        return newDateString;
     }
 
     /**
