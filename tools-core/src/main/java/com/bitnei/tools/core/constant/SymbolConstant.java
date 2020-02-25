@@ -8,15 +8,21 @@ package com.bitnei.tools.core.constant;
  */
 public class SymbolConstant {
 
-    /**,*/
+    /**
+     * ,
+     */
     public final static String COMMA = ",";
 
     public final static String SLASH = "/";
     public final static String BACK_SLASH = "\\";
-    /**:*/
+    /**
+     * :
+     */
     public final static String COLON = ":";
 
-    /** 下划线 */
+    /**
+     * 下划线
+     */
     public static final String UNDER_LINE = "_";
 
     /**
@@ -28,39 +34,59 @@ public class SymbolConstant {
      */
     public static final String VERTICAL_LINE_REG = "\\|";
 
-    /** ; */
+    /**
+     * ;
+     */
     public final static String SEMICOLON = ";";
 
-    /**[*/
-    public final static String SQUARE_BRACKETS_LEFT       = "[";
-    /**]*/
-    public final static String SQUARE_BRACKETS_RIGHT      = "]";
+    /**
+     * [
+     */
+    public final static String SQUARE_BRACKETS_LEFT = "[";
+    /**
+     * ]
+     */
+    public final static String SQUARE_BRACKETS_RIGHT = "]";
 
-    public final static String CURLY_BRACKETS_LEFT        = "{";
-    public final static String CURLY_BRACKETS_RIGHT       = "}";
-    /**(*/
-    public final static String PARENTHESES_BRACKETS_LEFT  = "(";
-    /**)*/
+    public final static String CURLY_BRACKETS_LEFT = "{";
+    public final static String CURLY_BRACKETS_RIGHT = "}";
+    /**
+     * (
+     */
+    public final static String PARENTHESES_BRACKETS_LEFT = "(";
+    /**
+     * )
+     */
     public final static String PARENTHESES_BRACKETS_RIGHT = ")";
 
     public final static String QUESTION_SIGN = "?";
     public final static String AND_SIGN = "&";
-    /** # */
+    /**
+     * #
+     */
     public final static String POUND = "#";
-    /** * */
+    /**
+     *
+     */
     public final static String ASTERISK = "*";
 
-    /** $ */
+    /**
+     * $
+     */
     public final static String DOLLAR_SIGN = "$";
 
     public final static String ELLIPSIS_THREE = "...";
-    public final static String ELLIPSIS_SIX   = "......";
+    public final static String ELLIPSIS_SIX = "......";
 
-    /** = */
+    /**
+     * =
+     */
     public final static String EQUAL_SIGN = "=";
-    /**-*/
+    /**
+     * -
+     */
     public final static String MINUS_SIGN = "-";
-    public final static String PLUS_SIGN= "+";
+    public final static String PLUS_SIGN = "+";
     public final static String MULTIPLICATION_SIGN = "*";
     public final static String PERCENT = "%";
 
@@ -71,7 +97,14 @@ public class SymbolConstant {
 
     public final static String POUND_TWENTY = " #################### ";
 
-    /** 回车换行 **/
+    /**
+     * 回车换行
+     */
     public final static String BR = "\n";
+
+    /**
+     * 空格
+     */
+    public final static String WHITE_SPACE = " ";
 
 }
