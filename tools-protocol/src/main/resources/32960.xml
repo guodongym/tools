@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<protocol id="32960">
+    <upstream>
+        <cmdTag code="0x01" name="车辆登入">
+            <di seqNo="2000" name="数据采集时间" pos="0" dataType="time"/>
+            <di seqNo="1001" name="流水号" dataType="word"/>
+            <di seqNo="1002" name="iccid" dataType="string" encoder="base64" byteSize="20"/>
+            <di seqNo="1003" name="可充电储能子系统数"  dataType="byte"/>
+            <di seqNo="1004" name="可充电储能系统编码长度"  dataType="byte"/>
+            <di seqNo="1005" dataType="array" name="可充电储能系统编码列表" byteSize="d1003.val*d1004.val">
+                <di seqNo="1006" name="可充电储能系统编码" dataType="string" byteSize="d1004.val"/>
+            </di>
+        </cmdTag>
+        <cmdTag code="0x02" name="实时数据上报">
+            <di seqNo="2000" name="数据采集时间" pos="0" dataType="time"/>
+            <cmdTag code="0x01" name="整车数据">
+                <di seqNo="2001" name="车辆状态" dataType="byte"/>
+                <di seqNo="2002" name="充电状态" dataType="byte"/>
+                <di seqNo="2003" name="运行模式" dataType="byte"/>
+                <di seqNo="2004" name="车速" dataType="word"/>
+                <di seqNo="2005" name="累计里程" dataType="dword"/>
+                <di seqNo="2006" name="总电压" dataType="word" factor="0.1"/>
+                <di seqNo="2007" name="总电流" dataType="word"/>
+                <di seqNo="2009" name="SOC" dataType="byte"/>
+                <di seqNo="2010" name="DC-DC状态" dataType="byte"/>
+                <di seqNo="2011" name="档位" dataType="byte"/>
+                <di seqNo="2012" name="绝缘电阻" dataType="word"/>
+                <di seqNo="2013" name="预留" dataType="word"/>
+            </cmdTag>
+            <cmdTag code="0x02" name="驱动电机数据">
+                <di seqNo="2014" name="驱动电机个数" dataType="byte"/>
+                <di seqNo="2015" name="驱动电机总成信息列表" dataType="array2" byteSize="d2014.val * 12" listCount="d2014.val">
+                    <di seqNo="2016" name="驱动电机序号" dataType="byte"/>
+                    <di seqNo="2017" name="驱动电机状态" dataType="byte"/>
+                    <di seqNo="2018" name="驱动电机控制器温度" dataType="byte"/>
+                    <di seqNo="2019" name="驱动电机转速" dataType="word"/>
+                    <di seqNo="2020" name="驱动电机转矩" dataType="word"/>
+                    <di seqNo="2021" name="驱动电机控制器温度" dataType="byte"/>
+                    <di seqNo="2022" name="电机控制器输入电压" dataType="word"/>
+                    <di seqNo="2023" name="电机控制器直流母线电流" dataType="word"/>
+                </di>
+            </cmdTag>
+            <cmdTag code="0x03" name="燃料电池数据">
+                <di seqNo="2024" name="燃料电池电压" dataType="word"/>
+                <di seqNo="2025" name="燃料电池电流" dataType="word"/>
+                <di seqNo="2026" name="燃料消耗率" dataType="word"/>
+                <di seqNo="2028" name="燃料电池温度探针总数" dataType="word"/>
+                <di seqNo="2029" name="探针温度值列表" dataType="array2" byteSize="d2028.val * 10" listCount="d2028.val">
+                    <di seqNo="2030" name="氢系统中最高温度" dataType="word"/>
+                    <di seqNo="2031" name="氢系统中最高温度探针代号" dataType="byte"/>
+                    <di seqNo="2032" name="氢气最高浓度" dataType="word"/>
+                    <di seqNo="2033" name="氢气最高浓度传感器代号" dataType="byte"/>
+                    <di seqNo="2034" name="氢气最高压力" dataType="word"/>
+                    <di seqNo="2035" name="氢气最高压力传感器代号" dataType="byte"/>
+                    <di seqNo="2036" name="高压DC/DC状态" dataType="byte"/>
+                </di>
+            </cmdTag>
+            <cmdTag code="0x04" name="发动机数据">
+                <di seqNo="2037" name="发动机状态" dataType="byte"/>
+                <di seqNo="2038" name="曲轴转速" dataType="word"/>
+                <di seqNo="2039" name="燃料消耗率" dataType="word"/>
+            </cmdTag>
+            <cmdTag code="0x05" name="车辆位置数据">
+                <di seqNo="2051" name="定位状态" dataType="byte"/>
+                <di seqNo="2052" name="经度" dataType="dword"/>
+                <di seqNo="2053" name="纬度" dataType="dword"/>
+            </cmdTag>
+            <cmdTag code="0x06" name="极值数据">
+                <di seqNo="2061" name="最高电压电池子系统号" dataType="byte"/>
+                <di seqNo="2062" name="最高电压电池单体代号" dataType="byte"/>
+                <di seqNo="2063" name="电池单体电压最高值" dataType="word"/>
+                <di seqNo="2064" name="最低电压电池子系统号" dataType="byte"/>
+                <di seqNo="2065" name="最低电压电池单体代号" dataType="byte"/>
+                <di seqNo="2066" name="电池单体电压最低值" dataType="word"/>
+                <di seqNo="2067" name="最高温度子系统号" dataType="byte"/>
+                <di seqNo="2068" name="最高温度探针序号" dataType="byte"/>
+                <di seqNo="2069" name="最高温度值" dataType="byte"/>
+                <di seqNo="2070" name="最低温度子系统号" dataType="byte"/>
+                <di seqNo="2071" name="最低温度探针序号" dataType="byte"/>
+                <di seqNo="2072" name="最低温度值" dataType="byte"/>
+            </cmdTag>
+            <cmdTag code="0x07" name="报警数据">
+                <di seqNo="2081" name="最高报警等级" dataType="byte"/>
+                <di seqNo="2082" name="通用报警标志" dataType="dword">
+                    <di seqNo="208200" name="温度差异报警" dataType="bits" bitCount="1"/>
+                    <di seqNo="208201" name="电池高温报警" dataType="bits" bitCount="1"/>
+                    <di seqNo="208202" name="车载储能装置类型过压报警" dataType="bits" bitCount="1"/>
+                    <di seqNo="208203" name="车载储能装置类型欠压报警" dataType="bits" bitCount="1"/>
+                    <di seqNo="208204" name="SOC低报警" dataType="bits" bitCount="1"/>
+                    <di seqNo="208205" name="单体电池过压报警" dataType="bits" bitCount="1"/>
+                    <di seqNo="208206" name="单体电池欠压报警" dataType="bits" bitCount="1"/>
+                    <di seqNo="208207" name="SOC过高报警" dataType="bits" bitCount="1"/>
+                    <di seqNo="208208" name="SOC跳变报警" dataType="bits" bitCount="1"/>
+                    <di seqNo="208209" name="可充电储能系统不匹配报警" dataType="bits" bitCount="1"/>
+                    <di seqNo="208210" name="电池单体一致性差报警" dataType="bits" bitCount="1"/>
+                    <di seqNo="208211" name="绝缘报警" dataType="bits" bitCount="1"/>
+                    <di seqNo="208212" name="DC-DC温度报警" dataType="bits" bitCount="1"/>
+                    <di seqNo="208213" name="制动系统报警" dataType="bits" bitCount="1"/>
+                    <di seqNo="208214" name="DC-DC 状态报警" dataType="bits" bitCount="1"/>
+                    <di seqNo="208215" name="驱动电机控制器温度报警" dataType="bits" bitCount="1"/>
+                    <di seqNo="208216" name="高压互锁状态报警" dataType="bits" bitCount="1"/>
+                    <di seqNo="208217" name="驱动电机温度报警" dataType="bits" bitCount="1"/>
+                    <di seqNo="208218" name="车载储能装置类型过充" dataType="bits" bitCount="1"/>
+                </di>
+                <di seqNo="2083" name="可充电储能装置故障总数" dataType="byte"/>
+                <di seqNo="2084" dataType="array" name="可充电储能装置故障列表" byteSize="d2083.val*4">
+                    <di seqNo="2805" name="可充电储能装置故障" dataType="dword"/>
+                </di>
+                <di seqNo="2086" name="驱动电机故障总数" dataType="byte"/>
+                <di seqNo="2087" dataType="array" name="可充电储能装置故障列表" byteSize="d2086.val*4">
+                    <di seqNo="2808" name="可充电储能装置故障" dataType="dword"/>
+                </di>
+                <di seqNo="2089" name="发动机故障总数" dataType="byte"/>
+                <di seqNo="2090" dataType="array" name="发动机装置故障列表" byteSize="d2089.val*4">
+                    <di seqNo="2091" name="发动机储能装置故障" dataType="dword"/>
+                </di>
+                <di seqNo="2092" name="其他故障总数" dataType="byte"/>
+                <di seqNo="2093" dataType="array" name="发动机装置故障列表" byteSize="d2092.val*4">
+                    <di seqNo="2094" name="发动机储能装置故障" dataType="dword"/>
+                </di>
+            </cmdTag>
+            <cmdTag code="0x08" name="可充电储能装置电压数据">
+                <di seqNo="3001" name="可充电储能子系统个数" dataType="byte"/>
+                <di seqNo="3002" name="可充电储能子系统电压信息列表" dataType="array2" listCount="d3001.val">
+                    <di seqNo="3003" name="可充电储能子系统号" dataType="byte"/>
+                    <di seqNo="3004" name="可充电储能装置电压 " dataType="word"/>
+                    <di seqNo="3005" name="可充电储能装置电流" dataType="word"/>
+                    <di seqNo="3006" name="单体电池总数" dataType="word"/>
+                    <di seqNo="3007" name="本帧起始电池序号" dataType="word"/>
+                    <di seqNo="3008" name="本帧单体电池总数" dataType="byte"/>
+                    <di seqNo="3009" dataType="array" name="单体电池电压列表" byteSize="d3008.val*2" listCount="d3008.val">
+                        <di seqNo="3010" name="单体电池电压" dataType="word"/>
+                    </di>
+                </di>
+            </cmdTag>
+            <cmdTag code="0x09" name="可充电储能装置温度数据">
+                <di seqNo="3101" name="可充电储能子系统个数" dataType="byte"/>
+                <di seqNo="3102" name="可充电储能子系统温度信息列表" dataType="array2" listCount="d3101.val">
+                    <di seqNo="3103" name="可充电储能子系统号" dataType="byte"/>
+                    <di seqNo="3104" name="可充电储能温度探针个数" dataType="word"/>
+                    <di seqNo="3105" dataType="array" name="可充电储能子系统各温度探针检测到的温度列表" byteSize="d3104.val" listCount="d3104.val">
+                        <di seqNo="3106" name="温度值" dataType="byte"/>
+                    </di>
+                </di>
+            </cmdTag>
+            <cmdTag code="0x80" name="自定义数据项0x80">
+                <di seqNo="3201" name="自定义数据长度" dataType="word"/>
+                <di seqNo="3202" name="自定义数据" dataType="source" byteSize="d3201.val"/>
+            </cmdTag>
+            <cmdTag code="0x81" name="自定义数据项0x81">
+                <di seqNo="3301" name="自定义数据长度" dataType="word"/>
+                <di seqNo="3302" name="自定义数据" dataType="source" byteSize="d3301.val"/>
+            </cmdTag>
+        </cmdTag>
+    </upstream>
+
+</protocol>
