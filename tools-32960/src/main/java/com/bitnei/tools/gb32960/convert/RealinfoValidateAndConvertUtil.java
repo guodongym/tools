@@ -44,7 +44,7 @@ public class RealinfoValidateAndConvertUtil {
     }
 
 
-    private static Map<String, String> processMessageToMap(String message) {
+    public static Map<String, String> processMessageToMap(String message) {
         //把{}去掉
         if (message.startsWith("{")) {
             message = message.substring(1);
