@@ -1,4 +1,4 @@
-package com.bitnei.tools.protocol.bean;
+package com.bitnei.tools.protocol.unpack.bean;
 
 import com.google.gson.Gson;
 import com.jayway.jsonpath.JsonPath;

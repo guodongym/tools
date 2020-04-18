@@ -1,7 +1,7 @@
-package com.bitnei.tools.protocol.bean;
+package com.bitnei.tools.protocol.unpack.bean;
 
 
-import com.bitnei.tools.protocol.consts.DataConst;
+import com.bitnei.tools.protocol.constant.DataConst;
 import lombok.Builder;
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package com.bitnei.tools.gb32960.deflection;
+package com.bitnei.tools.protocol.gb32960.deflection;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

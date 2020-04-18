@@ -1,7 +1,8 @@
 package com.bitnei.tools.protocol;
 
-import com.bitnei.tools.protocol.bean.DataItem;
-import com.bitnei.tools.protocol.bean.DataMessage;
+import com.bitnei.tools.protocol.unpack.bean.DataItem;
+import com.bitnei.tools.protocol.unpack.bean.DataMessage;
+import com.bitnei.tools.protocol.unpack.MessageUnPacker;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

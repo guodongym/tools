@@ -1,6 +1,6 @@
-package com.bitnei.tools.gb32960.convert;
+package com.bitnei.tools.protocol.gb32960.convert;
 
-import com.bitnei.tools.gb32960.constant.Constant;
+import com.bitnei.tools.protocol.constant.Constant;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 

@@ -1,4 +1,4 @@
-package com.bitnei.tools.protocol.consts;
+package com.bitnei.tools.protocol.constant;
 
 import java.util.HashMap;
 import java.util.Map;

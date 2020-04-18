@@ -15,7 +15,6 @@
         <module>tools-poi</module>
         <module>tools-all</module>
         <module>tools-gps</module>
-        <module>tools-32960</module>
         <module>tools-protocol</module>
     </modules>
 

@@ -1,6 +1,6 @@
-package com.bitnei.tools.protocol.util;
+package com.bitnei.tools.protocol.unpack.util;
 
-import com.bitnei.tools.protocol.consts.DataConst;
+import com.bitnei.tools.protocol.constant.DataConst;
 import jodd.util.Base64;
 import jodd.util.StringUtil;
 

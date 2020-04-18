@@ -1,4 +1,4 @@
-package com.bitnei.tools.gb32960.constant;
+package com.bitnei.tools.protocol.constant;
 
 import java.util.Arrays;
 import java.util.List;
