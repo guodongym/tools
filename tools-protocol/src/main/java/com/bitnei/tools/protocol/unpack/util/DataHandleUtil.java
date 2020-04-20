@@ -1,8 +1,8 @@
 package com.bitnei.tools.protocol.unpack.util;
 
+import cn.hutool.core.codec.Base64;
 import com.bitnei.tools.protocol.constant.DataConst;
-import jodd.util.Base64;
-import jodd.util.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
@@ -73,11 +73,11 @@ public class DataHandleUtil {
         }
         catch (UnsupportedEncodingException e) {
         }
-        if (StringUtil.isEmpty(val)){
+        if (StringUtils.isEmpty(val)){
             return "";
         }
         if ("base64".equalsIgnoreCase(encoder)){
-            return Base64.encodeToString(val);
+            return Base64.encode(val);
         }
         else {
             return val;

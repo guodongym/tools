@@ -1,13 +1,14 @@
 package com.bitnei.tools.protocol.unpack;
 
-import com.bitnei.tools.protocol.unpack.bean.*;
 import com.bitnei.tools.protocol.constant.DataConst;
 import com.bitnei.tools.protocol.exception.MessageException;
+import com.bitnei.tools.protocol.unpack.bean.*;
 import com.bitnei.tools.protocol.unpack.util.DataHandleUtil;
 import com.bitnei.tools.protocol.unpack.util.XmlUtil;
 import com.googlecode.aviator.AviatorEvaluator;
 import com.googlecode.aviator.Expression;
-import jodd.util.StringUtil;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.jdom2.Attribute;
 import org.jdom2.Element;
 
@@ -265,7 +266,7 @@ public class MessageUnPacker {
         for (DataItemConfig dic: duc.getDataItems()) {
 
             // 先计算出当前的pos， 如果当前数据项配置没有配置pos，那么就自动默认为当前的pos变量值，否则将调用表达式来计算出实际的pos
-            if (StringUtil.isNotEmpty(dic.getPos())){
+            if (StringUtils.isNotEmpty(dic.getPos())){
                 pos = expressionToInt(dic.getPos(), params);
             }
             pos = parseDataItem(buf, pos,  dic, dataItems, params);
@@ -396,7 +397,7 @@ public class MessageUnPacker {
             int subPos = pos;
             int listCount = 0;
             String countString = dic.getAttributes().get("listCount");
-            if (StringUtil.isNotEmpty(countString)){
+            if (StringUtils.isNotEmpty(countString)){
                 listCount = expressionToInt(countString, params);
             }
             else {
@@ -407,7 +408,7 @@ public class MessageUnPacker {
                 // 增加数组索引
                 params.put("d" + dic.getSeqNo() + "_index", i);
                 // 先计算出当前的pos， 如果当前数据项配置没有配置pos，那么就自动默认为当前的pos变量值，否则将调用表达式来计算出实际的pos
-                if (StringUtil.isNotEmpty(subDic.getPos())){
+                if (StringUtils.isNotEmpty(subDic.getPos())){
                     subPos = expressionToInt(subDic.getPos(), params);
                 }
                 subPos = parseDataItem(buf, subPos, subDic, children, params);
@@ -427,7 +428,7 @@ public class MessageUnPacker {
             // 如果listCount属性不为空，取listCount表达式，否则直接取上一个数据项
             int listCount = 0;
             String countString = dic.getAttributes().get("listCount");
-            if (StringUtil.isNotEmpty(countString)){
+            if (StringUtils.isNotEmpty(countString)){
                 listCount = expressionToInt(countString, params);
             }
             else {
@@ -441,7 +442,7 @@ public class MessageUnPacker {
                     DataItemConfig subDic = dic.getChildren().get(i);
 
                     // 先计算出当前的pos， 如果当前数据项配置没有配置pos，那么就自动默认为当前的pos变量值，否则将调用表达式来计算出实际的pos
-                    if (StringUtil.isNotEmpty(subDic.getPos())){
+                    if (StringUtils.isNotEmpty(subDic.getPos())){
                         subPos = expressionToInt(subDic.getPos(), params);
                     }
                     subPos = parseDataItem(buf, subPos, subDic, subChildren, params);
@@ -493,7 +494,7 @@ public class MessageUnPacker {
      */
     private int expressionToInt(final String expression, Map<String, Object> params){
 
-        if (StringUtil.containsOnlyDigits(expression)){
+        if (NumberUtils.isDigits(expression)){
             return Integer.parseInt(expression);
         }
         // 编译表达式
