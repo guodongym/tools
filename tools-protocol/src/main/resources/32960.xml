@@ -46,7 +46,7 @@
                 <di seqNo="v2111" name="燃料电池电流" dataType="word"/>
                 <di seqNo="v2112" name="燃料消耗率" dataType="word"/>
                 <di seqNo="v2113" name="燃料电池温度探针总数" dataType="word"/>
-                <di seqNo="v2114" name="探针温度值列表" dataType="array2" byteSize="dv2113.val * 1" listCount="dv2113.val">
+                <di seqNo="v2114" name="探针温度值列表" dataType="array" byteSize="dv2113.val * 1" listCount="dv2113.val">
                     <di seqNo="2030" name="探针温度值" dataType="byte"/>
                 </di>
                 <di seqNo="v2115" name="氢系统中最高温度" dataType="word"/>
