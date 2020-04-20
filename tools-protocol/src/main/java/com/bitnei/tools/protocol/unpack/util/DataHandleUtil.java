@@ -119,7 +119,7 @@ public class DataHandleUtil {
      */
     public static String byte2Time(final byte[] data, final int pos){
         StringBuffer sb = new StringBuffer();
-        sb.append(String.format("20%02d-%02d-%02d %02d:%02d:%02d", data[pos+0], data[pos+1], data[pos+2], data[pos+3], data[pos+4], data[pos+5]));
+        sb.append(String.format("20%02d%02d%02d%02d%02d%02d", data[pos+0], data[pos+1], data[pos+2], data[pos+3], data[pos+4], data[pos+5]));
         return sb.toString();
     }
 
