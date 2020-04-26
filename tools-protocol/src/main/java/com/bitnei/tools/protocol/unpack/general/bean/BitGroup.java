@@ -1,4 +1,4 @@
-package com.bitnei.tools.protocol.unpack.bean;
+package com.bitnei.tools.protocol.unpack.general.bean;
 
 import lombok.Builder;
 import lombok.Data;
