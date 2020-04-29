@@ -1,10 +1,10 @@
-package com.bitnei.tools.protocol.unpack.general;
+package com.bitnei.tools.protocol.general;
 
 import com.bitnei.tools.protocol.constant.DataConst;
 import com.bitnei.tools.protocol.exception.MessageException;
-import com.bitnei.tools.protocol.unpack.general.bean.*;
-import com.bitnei.tools.protocol.unpack.general.util.DataHandleUtil;
-import com.bitnei.tools.protocol.unpack.general.util.XmlUtil;
+import com.bitnei.tools.protocol.general.bean.*;
+import com.bitnei.tools.protocol.general.util.DataHandleUtil;
+import com.bitnei.tools.protocol.general.util.XmlUtil;
 import com.googlecode.aviator.AviatorEvaluator;
 import com.googlecode.aviator.Expression;
 import org.apache.commons.lang3.StringUtils;

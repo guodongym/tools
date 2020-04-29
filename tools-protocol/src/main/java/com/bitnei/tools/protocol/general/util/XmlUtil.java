@@ -1,4 +1,4 @@
-package com.bitnei.tools.protocol.unpack.general.util;
+package com.bitnei.tools.protocol.general.util;
 
 import org.jdom2.*;
 import org.jdom2.filter.Filters;

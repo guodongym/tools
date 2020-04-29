@@ -1,8 +1,8 @@
 package com.bitnei.tools.protocol;
 
-import com.bitnei.tools.protocol.unpack.general.UnPacker32960;
-import com.bitnei.tools.protocol.unpack.general.bean.DataItem;
-import com.bitnei.tools.protocol.unpack.general.bean.DataMessage;
+import com.bitnei.tools.protocol.general.UnPacker32960;
+import com.bitnei.tools.protocol.general.bean.DataItem;
+import com.bitnei.tools.protocol.general.bean.DataMessage;
 import com.google.common.base.Stopwatch;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

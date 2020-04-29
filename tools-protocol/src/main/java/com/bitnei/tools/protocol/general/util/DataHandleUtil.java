@@ -1,4 +1,4 @@
-package com.bitnei.tools.protocol.unpack.general.util;
+package com.bitnei.tools.protocol.general.util;
 
 import cn.hutool.core.codec.Base64;
 import com.bitnei.tools.protocol.constant.DataConst;

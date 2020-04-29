@@ -1,4 +1,4 @@
-package com.bitnei.tools.protocol.unpack.general.bean;
+package com.bitnei.tools.protocol.general.bean;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
