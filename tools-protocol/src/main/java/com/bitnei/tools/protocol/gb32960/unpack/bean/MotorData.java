@@ -3,6 +3,8 @@ package com.bitnei.tools.protocol.gb32960.unpack.bean;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 /**
  * 驱动电机数据
  *
@@ -11,7 +13,9 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class MotorData {
+public class MotorData implements Serializable {
+    private static final long serialVersionUID = -5475309648759530648L;
+
     /**
      * 驱动电机序号
      */

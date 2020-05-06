@@ -12,6 +12,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.util.ReferenceCountUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.List;
@@ -19,24 +20,38 @@ import java.util.List;
 import static com.bitnei.tools.protocol.gb32960.util.RealinfoType.formCode;
 
 /**
- * 报文解析工具类
+ * GB32960 报文解析工具类
  *
  * @author zhaogd
  * @date 2020/4/29
  */
+@Slf4j
 public class UnPack32960Util {
 
+    /**
+     * 解析报文
+     *
+     * @param hexString 16进制字符串
+     * @return 解析结果
+     */
     public static Message unPack(String hexString) {
         return unPack(ByteBufUtil.decodeHexDump(hexString));
     }
 
+    /**
+     * 解析报文
+     *
+     * @param bytes 字节数组
+     * @return 解析结果
+     */
     public static Message unPack(byte[] bytes) {
         final ByteBuf src = PooledByteBufAllocator.DEFAULT.buffer();
+        Message message = new Message();
         try {
             src.writeBytes(bytes);
             int pos = 0;
             // 读取报文头
-            final Message message = ProtocolUtil.readHeader(src);
+            message = ProtocolUtil.readHeader(src);
             pos += 22;
 
             // 读取数据单元长度
@@ -61,12 +76,55 @@ public class UnPack32960Util {
             byte messageBcc = ProtocolUtil.bcc(bytes, 0, bytes.length - 1);
             message.setValidateResult(bcc == messageBcc);
 
-            return message;
+
+        } catch (Exception e) {
+            log.error("解析报文异常", e);
         } finally {
             ReferenceCountUtil.release(src);
         }
+        return message;
     }
 
+    /**
+     * 获取驱动电机明细
+     *
+     * @param count     电机个数
+     * @param hexString 电机16进制字符串
+     * @return 解析结果
+     */
+    public static List<MotorData> getMotorDataList(int count, String hexString) {
+        final ByteBuf src = PooledByteBufAllocator.DEFAULT.buffer();
+        List<MotorData> motorList = Lists.newArrayList();
+        try {
+            src.writeBytes(ByteBufUtil.decodeHexDump(hexString));
+
+            for (int i = 0; i < count; i++) {
+                final MotorData motorData = new MotorData();
+                motorData.setV2309(src.readByte());
+                motorData.setV2310(src.readByte());
+                motorData.setV2302(src.readByte());
+                motorData.setV2303(src.readShort());
+                motorData.setV2311(src.readShort());
+                motorData.setV2304(src.readByte());
+                motorData.setV2305(src.readShort());
+                motorData.setV2306(src.readShort());
+                motorList.add(motorData);
+            }
+        } catch (Exception e) {
+            log.error("解析驱动电机明细异常", e);
+        } finally {
+            ReferenceCountUtil.release(src);
+        }
+        return motorList;
+    }
+
+    /**
+     * 读取报文体
+     *
+     * @param src    字节buf
+     * @param length 报文体长度
+     * @return 报文体
+     */
     private static Realinfo readBody(ByteBuf src, short length) {
         int pos = 0;
         final Realinfo realinfo = new Realinfo();
@@ -266,21 +324,9 @@ public class UnPack32960Util {
     private static int readMotorData(ByteBuf src, Realinfo body) {
         final byte count = src.readByte();
         final int length = count * 12;
-        List<MotorData> motorList = Lists.newArrayList();
-        for (int i = 0; i < count; i++) {
-            final MotorData motorData = new MotorData();
-            motorData.setV2309(src.readByte());
-            motorData.setV2310(src.readByte());
-            motorData.setV2302(src.readByte());
-            motorData.setV2303(src.readShort());
-            motorData.setV2311(src.readShort());
-            motorData.setV2304(src.readByte());
-            motorData.setV2305(src.readShort());
-            motorData.setV2306(src.readShort());
-            motorList.add(motorData);
-        }
+
         body.setV2307(count);
-        body.setV2308(JSON.toJSONString(motorList));
+        body.setV2308(ByteBufUtil.hexDump(ProtocolUtil.readBytes(src, count * 12)));
         return length + 1;
     }
 

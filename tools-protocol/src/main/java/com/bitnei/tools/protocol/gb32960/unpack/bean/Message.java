@@ -2,6 +2,8 @@ package com.bitnei.tools.protocol.gb32960.unpack.bean;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * 明细数据
  *
@@ -9,8 +11,9 @@ import lombok.Data;
  * @date 2020-02-21 17:32
  */
 @Data
-public class Message {
+public class Message implements Serializable {
 
+    private static final long serialVersionUID = -3003879633561191735L;
     /**
      * 起始符
      **/
