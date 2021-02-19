@@ -35,14 +35,17 @@ public class LogAspect {
             "|| @annotation(org.springframework.web.bind.annotation.PutMapping)" +
             "|| @annotation(org.springframework.web.bind.annotation.DeleteMapping)")
     public void requestMappingMethodPointcut() {
+        // no-op
     }
 
     @Pointcut(value = "@within(org.springframework.web.bind.annotation.RestController)")
     public void responseBodyMethodPointcut() {
+        // no-op
     }
 
     @Pointcut(value = "execution(* com.bitnei..*Controller.*(..)))")
     public void controllerMethodPointcut() {
+        // no-op
     }
 
     /**
@@ -50,6 +53,7 @@ public class LogAspect {
      */
     @Pointcut(value = "controllerMethodPointcut() && responseBodyMethodPointcut() && requestMappingMethodPointcut()")
     public void restControllerMethodPointcut() {
+        // no-op
     }
 
     /**
@@ -80,19 +84,22 @@ public class LogAspect {
             resultMeta = e.toString();
             throw e;
         } finally {
-            long endTimeMillis = System.currentTimeMillis();
-            String params = JSON.toJSONStringWithDateFormat(pjp.getArgs(), DateFormatEnum.DATE_TIME.getFormat());
+            try {
+                long endTimeMillis = System.currentTimeMillis();
 
-            log.info("请求地址: {}", request.getRequestURI());
-            log.info("HTTP method: {}", request.getMethod());
-            log.info("请求IP: {}", request.getRemoteAddr());
-            log.info("CLASS_METHOD: {}", pjp.getSignature().getDeclaringTypeName() + "." + pjp.getSignature().getName());
-            log.info("参数: {}", params);
-            log.info("返回值: {}", resultData);
-            if (StringUtils.isNotBlank(resultMeta)) {
-                log.info("异常信息: {}", resultMeta);
+                log.info("请求地址: {}", request.getRequestURI());
+                log.info("请求IP: {}", request.getRemoteAddr());
+                log.info("HTTP Method: {}", request.getMethod());
+                log.info("Class Method: {}", pjp.getSignature().getDeclaringTypeName() + "." + pjp.getSignature().getName());
+                log.info("参数: {}", JSON.toJSONStringWithDateFormat(pjp.getArgs(), DateFormatEnum.DATE_TIME.getFormat()));
+                log.info("返回值: {}", resultData);
+                if (StringUtils.isNotBlank(resultMeta)) {
+                    log.info("异常信息: {}", resultMeta);
+                }
+                log.info("执行时间: {} ms", endTimeMillis - startTimeMillis);
+            } catch (Exception e) {
+                log.error("日志AOP处理异常，", e);
             }
-            log.info("执行时间: {} ms", endTimeMillis - startTimeMillis);
         }
         log.info("=====================================Method  End====================================");
         return result;
